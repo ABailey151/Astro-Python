@@ -3,7 +3,7 @@ import numpy as np
 from int_props import tb_prop
 
 #Plot functions
-def Orbit_Plot(ax,R_p,rs,ttotal,N,tr_col,cb_col,wireframe=True,legend=True,show_cb=True):
+def Orbit_Plot(ax,R_p,rs,ttotal,N,tr_col,cb_col,wireframe=True,legend=True,show_cb=True,line=True):
     '''
     #Define Plot
     plt.style.use('bmh')
@@ -12,7 +12,11 @@ def Orbit_Plot(ax,R_p,rs,ttotal,N,tr_col,cb_col,wireframe=True,legend=True,show_
     #ax = plt.axes(projection="3d")
     '''
     #Trajectory
-    ax.plot(rs[:,0], rs[:,1], rs[:,2],color=tr_col)
+
+    if line == True:
+        ax.plot(rs[:,0], rs[:,1], rs[:,2],color=tr_col)
+    else:
+        ax.scatter(rs[:,0], rs[:,1], rs[:,2],color=tr_col)
     ax.plot(rs[0,0],rs[0,1],rs[0,2],marker='X',color=tr_col,label='Initial Position',markersize=10)
     th = str(round(ttotal/(60*60),3))
     ax.plot(rs[(N-1),0],rs[(N-1),1],rs[(N-1),2],marker='X',color='g',label='Position after '+th+' Hours',markersize=10)
@@ -74,45 +78,51 @@ def Traj(ax,rs,ttotal,N,tr_col):
 
     ax.set_aspect('equal')
 
-def elem_plot(elems,ts):
-#Element Plots
+def elem_plot(elems,ts,hours=True):
+    if hours == True:
+        ts = ts/3600
+        x_label = 'Time (Hours)'
+    else:
+        ts = ts/(3600*24)
+        x_label = 'Time (Days)'
+    #Element Plots
     elemfig, elemaxs = plt.subplots(2, 3, sharex='all', figsize=(16,8))
     elemfig.suptitle('Orbital Elements Delta', fontsize=16)
     plt.subplots_adjust(left=0.04,right=0.96,bottom=0.075,top=0.9,wspace=0.22,hspace=0.275)
 
     elemaxs[0,0].grid()
-    elemaxs[0,0].plot((ts/60**2), (elems[:,0]),'b')
+    elemaxs[0,0].plot((ts), (elems[:,0]),'b')
     elemaxs[0,0].set_title('Angular Momentum (h)')
-    elemaxs[0,0].set_xlabel('Time (Hours)')
+    elemaxs[0,0].set_xlabel(x_label)
     elemaxs[0,0].set_ylabel('(km^2/s)')
 
     elemaxs[0,1].grid()
-    elemaxs[0,1].plot((ts/60**2), (elems[:,1]),'b')
+    elemaxs[0,1].plot((ts), (elems[:,1]),'b')
     elemaxs[0,1].set_title('Eccentricity (e)')
-    elemaxs[0,1].set_xlabel('Time (Hours)')
+    elemaxs[0,1].set_xlabel(x_label)
 
     elemaxs[0,2].grid()
-    elemaxs[0,2].plot((ts/60**2), np.rad2deg(elems[:,2]),'b')
+    elemaxs[0,2].plot((ts), np.rad2deg(elems[:,2]),'b')
     elemaxs[0,2].set_title('True Anomaly (Theta)')
-    elemaxs[0,2].set_xlabel('Time (Hours)')
+    elemaxs[0,2].set_xlabel(x_label)
     elemaxs[0,2].set_ylabel('(Degrees)')
 
     elemaxs[1,0].grid()
-    elemaxs[1,0].plot((ts/60**2), np.rad2deg(elems[:,3]),'r')
+    elemaxs[1,0].plot((ts), np.rad2deg(elems[:,3]),'r')
     elemaxs[1,0].set_title('Right ascension of the Acsending Node (Omega)')
-    elemaxs[1,0].set_xlabel('Time (Hours)')
+    elemaxs[1,0].set_xlabel(x_label)
     elemaxs[1,0].set_ylabel('(Degrees)')
 
     elemaxs[1,1].grid()
-    elemaxs[1,1].plot((ts/60**2), np.rad2deg(elems[:,4]),'r')
+    elemaxs[1,1].plot((ts), np.rad2deg(elems[:,4]),'r')
     elemaxs[1,1].set_title('Inclination (i)')
-    elemaxs[1,1].set_xlabel('Time (Hours)')
+    elemaxs[1,1].set_xlabel(x_label)
     elemaxs[1,1].set_ylabel('(Degrees)')
 
     elemaxs[1,2].grid()
-    elemaxs[1,2].plot((ts/60**2), np.rad2deg(elems[:,5]),'r')
+    elemaxs[1,2].plot((ts), np.rad2deg(elems[:,5]),'r')
     elemaxs[1,2].set_title('Argument of Perigee (omega)')
-    elemaxs[1,2].set_xlabel('Time (Hours)')
+    elemaxs[1,2].set_xlabel(x_label)
     elemaxs[1,2].set_ylabel('(Degrees)')
 
     return elemfig, elemaxs

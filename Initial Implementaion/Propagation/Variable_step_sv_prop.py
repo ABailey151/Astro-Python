@@ -7,11 +7,10 @@ import matplotlib.pyplot as plt
 from sv_coe import sv_from_coe,coe_from_sv
 from plot_func import *
 
-
 #Orbit Initial conditions
 cb = pd.earth
 #'''
-ra = cb['radius'] + 15000
+ra = cb['radius'] + 150000
 rp = cb['radius'] + 800
 a = (ra+rp)/2
 emag = (ra-rp)/(ra+rp)
@@ -33,45 +32,45 @@ r0,v0 = sv_from_coe(cb['mu'],emag,hmag,i,lon_an,pearg,ta0)
 #v0 = np.array([-5.99249498,  1.9253664,   3.24563791]) # #np.array([-np.sqrt((u)/np.linalg.norm(r0)),0,0])
 
 #a,h,hmag,i,lon_an,e,emag,pearg,ta = coe_from_sv(cb['mu'],r0,v0)
-T = ((2*np.pi)/np.sqrt(cb['mu']))*(a**(3/2))
+
 def f(t,y):
 
-    rx,ry,rz,vx,vy,vz = y
-    r = np.array([rx,ry,rz])
-    v = np.array([vx,vy,vz])
+    r = y[0:3]
+    v = y[3:]
     am = -(cb['mu']/(np.linalg.norm(r)**3))
     a = am*r
-    dydt = np.array([v[0],v[1],v[2],a[0],a[1],a[2]]) #np.concatenate((v,a), axis=0)
+    dydt = np.append(v,a)
     return dydt
 
-y0 = np.array([r0[0],r0[1],r0[2],v0[0],v0[1],v0[2]]) #np.concatenate((r0,v0), axis=0)
-t0 = 0
+y0 = np.append(r0,v0)
 
 #Set time period and step length/amount
 ttotal = T
-tstep = 225
-N = int(np.ceil(ttotal/tstep) + 1)
-n = 1
+tstep = 10*(1.65**(-((hmag/np.linalg.norm(r0)) + 9.1))) + 20 #Note, this only considers the tangential velocity.
+n = 0
+t = 0
 
-rs = np.zeros([N,3])
-vs = np.zeros([N,3])
-rs[0] = r0
-vs[0] = v0
+rs = r0
+vs = v0
 
 prop = sp.integrate.ode(f,jac=None).set_integrator('dopri5')
-while n < N:
+while t < ttotal:
 
     prop.set_initial_value(y0,0)
     prop.integrate(tstep)
  
-    rs[n] = prop.y[0:3] #np.array([prop.y[0],prop.y[1],prop.y[2]])
-    vs[n] = prop.y[3:6] #np.array([prop.y[3],prop.y[4],prop.y[5]])
+    rs = np.vstack((rs,prop.y[0:3]))
+    vs = np.vstack((vs,prop.y[3:6]))
     y0 = prop.y
+    
     n = n + 1
-    print(n,'/',N)
+    t = t + tstep
+    tstep = 10*(1.65**(-(hmag/np.linalg.norm(prop.y[0:3])) + 9.1)) + 20
+
+print('\nOrbital Elements\nh (km^2/s) =',hmag,'\na (km) =',a,'\ni (Deg) =',np.rad2deg(i),'\nRAAN (Deg) =',np.rad2deg(lon_an),'\ne =',emag,'\nArg of Pe (Deg) =',np.rad2deg(pearg),'\nTa (Deg) =',np.rad2deg(ta0),'\n')
 
 fig = plt.figure(figsize=(8,8))
 ax = plt.subplot(projection='3d')
-tr_plot = Orbit_Plot(ax,cb['radius'],rs,ttotal,n,tr_col='r',cb_col=cb['col'],line=False)
-ax.set_title(('Keplerian Propagation with fixed step size, ('+str(n)+' Steps, '+str(tstep)+' Seconds each)'))
+tr_plot = Orbit_Plot(ax,cb['radius'],rs,ttotal,n+1,tr_col='r',cb_col=cb['col'],line=False)
+ax.set_title(('Keplerian Propagation with variable step size. ('+str(n)+' Steps)'))
 plt.show()
