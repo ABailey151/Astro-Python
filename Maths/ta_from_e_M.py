@@ -1,6 +1,6 @@
 from sys import path
 path.append('./Tools')
-from kep_Anom import *
+from Kep_Anom import *
 
 e = float(input("\nEccentricity = "))
 M = float(input("\nMean Anomaly = "))

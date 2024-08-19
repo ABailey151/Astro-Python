@@ -29,8 +29,8 @@ r0,v0 = sv_from_coe(cb['mu'],e,hmag,i,lon_an,pearg,ta0)
 y0 = np.array([r0[0],r0[1],r0[2],v0[0],v0[1],v0[2]])
 
 #Set time period and step length/amount
-ttotal = 480*(3600)
-tstep = ttotal/10000
+ttotal = 48*(3600)
+tstep = ttotal/1000
 N = int(np.ceil(ttotal/tstep) + 1)
 print(tstep,'Seconds per',N,'Steps')
 ts = time_arr(N,tstep)
