@@ -92,9 +92,9 @@ def elem_plot(elems,ts,hours=True):
 
     elemaxs[0,0].grid()
     elemaxs[0,0].plot((ts), (elems[:,0]),'b')
-    elemaxs[0,0].set_title('Angular Momentum (h)')
+    elemaxs[0,0].set_title('Semi-Major Axis (a)')
     elemaxs[0,0].set_xlabel(x_label)
-    elemaxs[0,0].set_ylabel('(km^2/s)')
+    elemaxs[0,0].set_ylabel('(km)')
 
     elemaxs[0,1].grid()
     elemaxs[0,1].plot((ts), (elems[:,1]),'b')
@@ -135,9 +135,9 @@ def elem_plot_d(elems,ts):
 
     elemaxs[0,0].grid()
     elemaxs[0,0].plot((ts/60**2), (elems[:,0]-elems[0,0]),'b')
-    elemaxs[0,0].set_title('Angular Momentum (h)')
+    elemaxs[0,0].set_title('Semi-Major Axis (a)')
     elemaxs[0,0].set_xlabel('Time (Hours)')
-    elemaxs[0,0].set_ylabel('(km^2/s)')
+    elemaxs[0,0].set_ylabel('(km)')
 
     elemaxs[0,1].grid()
     elemaxs[0,1].plot((ts/60**2), (elems[:,1]-elems[0,1]),'b')

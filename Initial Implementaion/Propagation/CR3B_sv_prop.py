@@ -114,24 +114,25 @@ bods = np.array([mb,sb])
 ra = mb['radius'] + 305000
 rp = mb['radius'] + 220000
 a = (ra+rp)/2
-e = (ra-rp)/(ra+rp)
-if e < 1:
-    hmag = np.sqrt((mb['mu']*a)*(1-(e**2)))
+emag = (ra-rp)/(ra+rp)
+if emag < 1:
+    hmag = np.sqrt((mb['mu']*a)*(1-(emag**2)))
 else:
-    hmag = np.sqrt((mb['mu']*(-a))*(1-(e**2)))
+    hmag = np.sqrt((mb['mu']*(-a))*(1-(emag**2)))
 i = np.deg2rad(25)
 lon_an = np.deg2rad(0)
 pearg = np.deg2rad(68)
 ta0 = np.deg2rad(30)
 T = ((2*np.pi)/np.sqrt(mb['mu']))*(a**(3/2))
+print('\nOrbital Elements\nh (km^2/s) =',hmag,'\na (km) =',a,'\ni (Deg) =',np.rad2deg(i),'\nRAAN (Deg) =',np.rad2deg(lon_an),'\ne =',emag,'\nArg of Pe (Deg) =',np.rad2deg(pearg),'\nTa (Deg) =',np.rad2deg(ta0),'\n')
 
-r0,v0 = sv_from_coe(mb['mu'],e,hmag,i,lon_an,pearg,ta0)
+r0,v0 = sv_from_coe(mb['mu'],emag,hmag,i,lon_an,pearg,ta0)
 
 #Set time period and step length/amount
 ttotal = 2.5*27.321661*24*3600 #One Lunar orbit
 tstep = 1200
 N = int(np.ceil(ttotal/tstep) + 1)
-print('\n'+str(N)+' Steps at '+str(tstep)+' Seconds\n')
+print('\n'+str(N)+' Steps at '+str(tstep)+' Seconds\n',2.5*27.321661)
 
 rs,vs,Rms = prop_luna_3b(bods,N,tstep,r0,v0,epoch)
 elems = sv_to_elems(mb,rs,vs,N)

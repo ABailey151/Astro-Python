@@ -114,7 +114,7 @@ def sv_to_elems(cb,rs,vs,N):
     j = 0
     
     while j < N:
-        _, _, elems[j,0], elems[j,4], elems[j,3], _, elems[j,1], elems[j,5], elems[j,2] = coe_from_sv(cb['mu'],rs[j],vs[j])
+        elems[j,0], _, _, elems[j,4], elems[j,3], _, elems[j,1], elems[j,5], elems[j,2] = coe_from_sv(cb['mu'],rs[j],vs[j])
         j = j + 1
     
     return elems

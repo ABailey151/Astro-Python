@@ -9,22 +9,22 @@ from plot_func import *
 
 #Orbit Initial conditions
 cb = pd.earth
-ra = cb['radius'] + 150
-rp = cb['radius'] + 80
+ra = cb['radius'] + 30620
+rp = cb['radius'] + 300
 a = (ra+rp)/2
-e = (ra-rp)/(ra+rp)
-if e < 1:
-    hmag = np.sqrt((cb['mu']*a)*(1-(e**2)))
+emag = (ra-rp)/(ra+rp)
+if emag < 1:
+    hmag = np.sqrt((cb['mu']*a)*(1-(emag**2)))
 else:
-    hmag = np.sqrt((cb['mu']*(-a))*(1-(e**2)))
-i = np.deg2rad(90)
-lon_an = np.deg2rad(0)
-pearg = np.deg2rad(270)
-ta0 = np.deg2rad(180)
+    hmag = np.sqrt((cb['mu']*(-a))*(1-(emag**2)))
+i = np.deg2rad(28)
+lon_an = np.deg2rad(45)
+pearg = np.deg2rad(30)
+ta0 = np.deg2rad(40)
 
 T = ((2*np.pi)/np.sqrt(cb['mu']))*(a**(3/2))
 
-r0,v0 = sv_from_coe(cb['mu'],e,hmag,i,lon_an,pearg,ta0)
+r0,v0 = sv_from_coe(cb['mu'],emag,hmag,i,lon_an,pearg,ta0)
 
 #Set time period and step length/amount
 ttotal = 2*24*(60**2)
