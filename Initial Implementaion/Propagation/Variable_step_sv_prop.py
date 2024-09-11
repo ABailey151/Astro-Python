@@ -4,7 +4,7 @@ import Planetary_data as pd
 import scipy as sp
 import numpy as np
 import matplotlib.pyplot as plt
-from sv_coe import sv_from_coe,coe_from_sv
+from sv_coe import sv_from_coe
 from plot_func import *
 
 #Orbit Initial conditions
@@ -45,7 +45,7 @@ def f(t,y):
 y0 = np.append(r0,v0)
 
 #Set time period and step length/amount
-ttotal = T
+ttotal = T/2
 tstep = 10*(1.65**(-((hmag/np.linalg.norm(r0)) + 9.1))) + 20 #Note, this only considers the tangential velocity.
 n = 0
 t = 0

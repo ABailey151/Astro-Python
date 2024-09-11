@@ -19,7 +19,7 @@ def Orbit_Plot(ax,R_p,rs,ttotal,N,tr_col,cb_col,wireframe=True,legend=True,show_
         ax.scatter(rs[:,0], rs[:,1], rs[:,2],color=tr_col)
     ax.plot(rs[0,0],rs[0,1],rs[0,2],marker='X',color=tr_col,label='Initial Position',markersize=10)
     th = str(round(ttotal/(60*60),3))
-    ax.plot(rs[(N-1),0],rs[(N-1),1],rs[(N-1),2],marker='X',color='g',label='Position after '+th+' Hours',markersize=10)
+    ax.plot(rs[(-1),0],rs[(-1),1],rs[(-1),2],marker='X',color='g',label='Position after '+th+' Hours',markersize=10)
     #ax.text(rs[0,0],rs[0,1],rs[0,2],'Initial Position',color='r')
     #ax.text(rs[(n-1),0],rs[(n-1),1],rs[(n-1),2],'Position after '+th+' Hours',color='g')
 
